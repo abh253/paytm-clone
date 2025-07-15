@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.connect("mongodb+srv://admin:RTj2Jp2mCQWAkY6Q@cluster0.ktsjk8w.mongodb.net/paytm-database")
 

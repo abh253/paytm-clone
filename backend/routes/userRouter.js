@@ -1,12 +1,14 @@
 const express = require("express");
-const {userSchema,updateUserSchema, userSigninSchema} = require("../schemas");
+const {userSignupSchema,updateUserSchema, userSigninSchema} = require("../schemas");
 const jwt=require("jsonwebtoken");
 const userRouter=express.Router();
 const {User,Account} = require("../db");
+const authMiddleware =require("../middleware");
 const JWT_SECRET = require("../config");
 
+
 userRouter.post("/signup",async (req,res)=>{
-    const result = userSchema.safeParse(req.body);
+    const result =userSignupSchema.safeParse(req.body);
 
     if(!result.success){
         return res.status(400).json({
@@ -26,7 +28,7 @@ userRouter.post("/signup",async (req,res)=>{
         
         const dbUser = await User.create(userData);
 
-        userId= dbUser._id;;
+        const userId= dbUser._id;;
 
         // Create an account for the user
         const account = await Account.create({
@@ -35,7 +37,7 @@ userRouter.post("/signup",async (req,res)=>{
         });
 
 
-        const token= jwt.sign(dbUser._id,JWT_SECRET);
+        const token= jwt.sign({userId},JWT_SECRET);
 
         res.status(201).json({
             message: "User created successfully",
@@ -47,32 +49,37 @@ userRouter.post("/signup",async (req,res)=>{
 
 userRouter.post("/signin",async (req,res)=>{
     const result = userSigninSchema.safeParse(req.body);
-
+    console.log(req.body);
     if(!result.success){
         return res.status(400).json({
             message: "Invalid user data",
             errors: result.error,
         });
     }
-
-    const userData = User.findOne(result.data);
+    // console.log(result.data);
+    const userData = await User.findOne(result.data);
     if(!userData){
         return res.status(404).json({
             message: "User not found",
         });
     }
-
-    const token = jwt.sign(userData._id, JWT_SECRET);
+    const userId=userData._id;
+    // console.log(userData);
+    const token = jwt.sign({userId}, JWT_SECRET);
 
     res.status(200).json({
         message: "User signed in successfully",
         token: token,
+        info :{
+            firstname:userData.firstname,
+            lastname: userData.lastname
+        }
     });
 
 })
 
 userRouter.put("/update",authMiddleware,async (req,res)=>{
-
+    // console.log(req.body);
     const result = updateUserSchema.safeParse(req.body);
 
     if(!result.success){
@@ -83,6 +90,7 @@ userRouter.put("/update",authMiddleware,async (req,res)=>{
     }
 
     const userData = result.data;
+    console.log(req.userId);
 
     // Find the user by ID
     const updateRes = await User.updateOne(userData,{_id: req.userId});
@@ -101,26 +109,28 @@ userRouter.put("/update",authMiddleware,async (req,res)=>{
 
 userRouter.get("/bulk",authMiddleware,async (req,res)=>{
     const filter= req.query.filter || "";
+    // console.log("filter:",filter);
 
-
-    const users = await User.find({
-    $or: [
-            { firstName: { $regex: 'xyz', $options: 'i' } },
-            { lastName: { $regex: 'xyz', $options: 'i' } }
-        ]
-    });
-
-    users= users.map((user) => {
+    // const users = await User.find({
+    // $or: [
+    //         { "firstName": { $regex: filter.trim(), $options: 'i' } },
+    //         { "lastName": { $regex: filter.trim(), $options: 'i' } }
+    //     ]
+    // });
+    const users= (await User.find({}));
+    // console.log(users);
+    filteredUsers= users.map((user) => {
         return {
             username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            firstname: user.firstname,
+            lastname: user.lastname,
             _id: user._id,
         };
-    })
+    });
+    // console.log(filteredUsers);
     res.status(200).json({
         message: "Users fetched successfully",
-        users: users,
+        users: filteredUsers,
     });
 })
-moudule.exports=userRouter;
+module.exports=userRouter;
