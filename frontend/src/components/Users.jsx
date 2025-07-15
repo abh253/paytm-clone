@@ -10,7 +10,7 @@ export const Users=()=>{
     useEffect(()=>{
         const getUserData=async ()=>{
             const AuthStr="Bearer "+localStorage.getItem("token");
-            const response=await axios.get("http://localhost:3000/api/v1/user/bulk?filter="+filter,{headers:{
+            const response=await axios.get("https://api-payapp-clone.onrender.com/api/v1/user/bulk?filter="+filter,{headers:{
                 'Authorization': AuthStr
             }});
             console.log(response);

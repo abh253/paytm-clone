@@ -32,7 +32,7 @@ export const SendPage=()=>{
                     setAmount(e.target.value);
                 }}/>
                 <button className="border w-70 px-4 py-2 rounded-sm my-4 bg-green-500 text-white" onClick={async ()=>{
-                    const response= await axios.post("http://localhost:3000/api/v1/account/transfer",{
+                    const response= await axios.post("https://api-payapp-clone.onrender.com/api/v1/account/transfer",{
                         to:id,
                         amount
                     },{

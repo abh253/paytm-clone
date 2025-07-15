@@ -9,7 +9,7 @@ export const Dashboard= ()=>{
     useEffect(()=>{
                     
         const fetchBalance = async()=>{
-            const response=await axios.get("http://localhost:3000/api/v1/account/balance",{
+            const response=await axios.get("https://api-payapp-clone.onrender.com/api/v1/account/balance",{
                 headers : {
                     Authorization:AuthStr
                 }});
