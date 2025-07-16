@@ -24,11 +24,16 @@ export const Signup = function (){
             username,
             password
             });
-            localStorage.setItem("token",response.data.token);
-            localStorage.setItem("firstname",response.data.info.firstname);
-            localStorage.setItem("lastname",response.data.info.lasttname);
-            console.log(response)
-            navigate("/dashboard");
+            if(response.status==201){
+                localStorage.setItem("token",response.data.token);
+                localStorage.setItem("firstname",response.data.info.firstname);
+                localStorage.setItem("lastname",response.data.info.lasttname);
+                console.log(response)
+                navigate("/dashboard");
+            }else{
+                alert("invalid credentials or user already exist");
+            }
+            
 
         }catch(err){
             console.log(err);
