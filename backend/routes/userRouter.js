@@ -131,6 +131,9 @@ userRouter.get("/bulk",authMiddleware,async (req,res)=>{
             _id: user._id,
         };
     });
+    // console.log(req.userId);
+    filteredUsers = filteredUsers.filter((user)=>user._id!=req.userId);
+    // console.log(filteredUsers);
     // console.log(filteredUsers);
     res.status(200).json({
         message: "Users fetched successfully",
