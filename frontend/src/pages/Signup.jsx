@@ -24,20 +24,18 @@ export const Signup = function (){
             username,
             password
             });
-            if(response.status===201){
-                localStorage.setItem("token",response.data.token);
-                localStorage.setItem("firstname",response.data.info.firstname);
-                localStorage.setItem("lastname",response.data.info.lasttname);
-                console.log(response)
-                navigate("/dashboard");
-            }else{
-                alert("invalid credentials or user already exist");
-            }
+            
+            localStorage.setItem("token",response.data.token);
+            localStorage.setItem("firstname",response.data.info.firstname);
+            localStorage.setItem("lastname",response.data.info.lasttname);
+            console.log(response)
+            navigate("/dashboard");
+          
             
 
         }catch(err){
             console.log(err);
-            alert("invalid credentials");
+            alert("invalid credentials or user already exist");
         }
        
     }
