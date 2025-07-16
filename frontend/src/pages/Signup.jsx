@@ -27,8 +27,9 @@ export const Signup = function (){
             localStorage.setItem("token",response.data.token);
             localStorage.setItem("firstname",response.data.info.firstname);
             localStorage.setItem("lastname",response.data.info.lasttname);
+            console.log(response)
             navigate("/dashboard");
-            
+
         }catch(err){
             console.log(err);
             alert("invalid credentials");
