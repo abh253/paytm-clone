@@ -42,6 +42,10 @@ userRouter.post("/signup",async (req,res)=>{
         res.status(201).json({
             message: "User created successfully",
             token:token,
+            info :{
+                firstname:dbUser.firstname,
+                lastname: dbUser.lastname
+            }
         });
     }
 

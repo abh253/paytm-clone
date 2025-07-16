@@ -23,11 +23,12 @@ export const Signup = function (){
             lastname,
             username,
             password
-        });
+            });
             localStorage.setItem("token",response.data.token);
             localStorage.setItem("firstname",response.data.info.firstname);
             localStorage.setItem("lastname",response.data.info.lasttname);
             navigate("/dashboard");
+            
         }catch(err){
             console.log(err);
             alert("invalid credentials");
