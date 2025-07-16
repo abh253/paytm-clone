@@ -24,7 +24,7 @@ export const Signup = function (){
             username,
             password
             });
-            if(response.status==201){
+            if(response.status===201){
                 localStorage.setItem("token",response.data.token);
                 localStorage.setItem("firstname",response.data.info.firstname);
                 localStorage.setItem("lastname",response.data.info.lasttname);
